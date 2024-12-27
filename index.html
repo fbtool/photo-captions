@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo captions Generator | Facebook Fuckers</title>
+    <title>Photo Captions Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     <style>
-        /* Global Styles */
         * {
             margin: 0;
             padding: 0;
@@ -50,8 +49,8 @@
 
         #caption-box {
             width: 100%;
-            height: 150px; /* Increased height */
-            font-size: 18px; /* Set font size */
+            height: 150px;
+            font-size: 18px;
             padding: 50px;
             border: none;
             border-radius: 10px;
@@ -91,116 +90,186 @@
 
             #caption-box {
                 font-size: 14px;
-                height: 150px; /* Adjusted height for smaller screens */
+                height: 150px;
             }
 
             button {
                 font-size: 14px;
             }
         }
+             /* Good Morning Button Style */
+            .good-morning {
+                background-color: #542387;
+                color: #cb99fd;
+                border-radius: 10px;
+                padding: 10px 20px;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
+
+            .good-morning:hover {
+                background-color: #000000;
+                color: #ffffff;
+            }
+
+            /* Good Night Button Style */
+            .good-night {
+                background-color: #2a5c4b; /* Customize color */
+                color: #deedfa;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
+
+            .good-night:hover {
+                background-color: #000000;
+                color: #ffffff;
+            }
+
+            /* Birthday Button Style */
+            .birthday {
+                background-color: #694317; /* Customize color */
+                color: #e98c00;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
+
+            .birthday:hover {
+                background-color: #000000;
+                color: #ffffff;
+            }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Photos Captions</h1>
-        <p class="info">Total Captions: <span id="total-count">0</span> | Remaining: <span id="remaining-count">0</span></p>
         <textarea id="caption-box" readonly></textarea>
         <div>
-            <button id="copy-button">Copy & Next</button>
+            <button id="good-morning-button" class="good-morning">Good Morning 🌻</button>
+            <button id="good-night-button" class="good-night">Good Night 🌛</button>
+            <button id="birthday-button" class="birthday">Birthday 🎁</button>            
+        </div>
+        <div>
+            <button id="previous-button">Previous</button>
+            <button id="next-button">Next</button>
             <button id="reset-button">Reset</button>
         </div>
     </div>
 
-    <audio id="reset-sound" src="reset.mp3"></audio> <!-- Reset sound -->
-    <audio id="click-sound" src="click.mp3"></audio> <!-- Click sound -->
+    <audio id="reset-sound" src="reset.mp3"></audio>
+    <audio id="click-sound" src="click.mp3"></audio>
+    <audio id="good-morning-sound" src="notification.mp3"></audio>
+    <audio id="good-night-sound" src="notification.mp3"></audio>
+    <audio id="birthday-sound" src="notification.mp3"></audio>
 
     <script>
-        let captions = [];
-        let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
-        const captionBox = document.getElementById("caption-box");
-        const totalCountElem = document.getElementById("total-count");
-        const remainingCountElem = document.getElementById("remaining-count");
-        const resetSound = document.getElementById("reset-sound");
-        const clickSound = document.getElementById("click-sound");
+    let captions = [];
+    let goodMorningCaptions = [];
+    let goodNightCaptions = [];
+    let birthdayCaptions = [];
+    let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
+    let currentCaptionIndex = 0;
+    let captionsArray = [];
+    const captionBox = document.getElementById("caption-box");
+    const resetSound = document.getElementById("reset-sound");
+    const clickSound = document.getElementById("click-sound");
+    const goodMorningSound = document.getElementById("good-morning-sound");
+    const goodNightSound = document.getElementById("good-night-sound");
+    const birthdaySound = document.getElementById("birthday-sound");
 
-        // Load captions from captions.txt
-        async function loadCaptions() {
-            try {
-                const response = await fetch('captions.txt');
-                const text = await response.text();
-                captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
-                shuffleArray(captions);
-                updateCounts();
-                updateCaptionBox();
-            } catch (error) {
-                captionBox.value = "Error loading captions!";
-                console.error(error);
-            }
-        }
+    // Load captions from files
+    async function loadCaptions() {
+        try {
+            const response = await fetch('captions.txt');
+            const text = await response.text();
+            captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
 
-        // Shuffle array
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
+            const morningResponse = await fetch('goodmorning.txt');
+            const morningText = await morningResponse.text();
+            goodMorningCaptions = morningText.split('----').map(c => c.trim());
 
-        // Display the next caption
-        function updateCaptionBox() {
-            if (captions.length > 0) {
-                captionBox.value = captions[0];
-            } else {
-                captionBox.value = "No more captions!";
-                document.getElementById("copy-button").disabled = true;
-            }
-        }
+            const nightResponse = await fetch('goodnight.txt');
+            const nightText = await nightResponse.text();
+            goodNightCaptions = nightText.split('----').map(c => c.trim());
 
-        // Update counts
-        function updateCounts() {
-            const totalCaptions = captions.length + usedCaptions.length;
-            totalCountElem.textContent = totalCaptions;
-            remainingCountElem.textContent = captions.length;
-        }
+            const birthdayResponse = await fetch('birthday.txt');
+            const birthdayText = await birthdayResponse.text();
+            birthdayCaptions = birthdayText.split('----').map(c => c.trim());
 
-        // Copy current caption and move to the next
-        function copyAndNext() {
-            if (captions.length === 0) return;
-
-            // Play click sound
-            clickSound.play();
-
-            // Copy caption to clipboard
-            navigator.clipboard.writeText(captionBox.value).then(() => {
-                console.log("Copied to clipboard");
-            }).catch(err => console.error("Error copying text: ", err));
-
-            // Mark caption as used
-            const usedCaption = captions.shift();
-            usedCaptions.push(usedCaption);
-            localStorage.setItem('usedCaptions', JSON.stringify(usedCaptions));
-
-            // Update the box with the next caption
-            updateCounts();
+            captionsArray = captions; // Set to default category captions
             updateCaptionBox();
+        } catch (error) {
+            captionBox.value = "Error loading captions!";
+            console.error(error);
         }
+    }
 
-        // Reset captions
-        function resetCaptions() {
-            localStorage.removeItem('usedCaptions');
-            usedCaptions = [];
-            loadCaptions();
-            document.getElementById("copy-button").disabled = false;
-
-            // Play reset sound
-            resetSound.play();
+    // Update the caption box
+    function updateCaptionBox() {
+        if (captionsArray.length > 0) {
+            captionBox.value = captionsArray[currentCaptionIndex];
+        } else {
+            captionBox.value = "No more captions!";
         }
+    }
 
-        // Initial setup
-        document.getElementById("copy-button").addEventListener("click", copyAndNext);
-        document.getElementById("reset-button").addEventListener("click", resetCaptions);
-        loadCaptions();
+    // Button handlers for switching between files
+    document.getElementById("good-morning-button").addEventListener("click", function() {
+        goodMorningSound.play(); // Play sound for Good Morning button
+        captionsArray = goodMorningCaptions.filter(c => !usedCaptions.includes(c));
+        currentCaptionIndex = 0;
+        updateCaptionBox();
+    });
+
+    document.getElementById("good-night-button").addEventListener("click", function() {
+        goodNightSound.play(); // Play sound for Good Night button
+        captionsArray = goodNightCaptions.filter(c => !usedCaptions.includes(c));
+        currentCaptionIndex = 0;
+        updateCaptionBox();
+    });
+
+    document.getElementById("birthday-button").addEventListener("click", function() {
+        birthdaySound.play(); // Play sound for Birthday button
+        captionsArray = birthdayCaptions.filter(c => !usedCaptions.includes(c));
+        currentCaptionIndex = 0;
+        updateCaptionBox();
+    });
+
+    document.getElementById("previous-button").addEventListener("click", function() {
+        clickSound.play();
+        if (currentCaptionIndex > 0) {
+            currentCaptionIndex--;
+        } else {
+            currentCaptionIndex = captionsArray.length - 1;
+        }
+        updateCaptionBox();
+    });
+
+    document.getElementById("next-button").addEventListener("click", function() {
+        clickSound.play();
+        if (currentCaptionIndex < captionsArray.length - 1) {
+            currentCaptionIndex++;
+        } else {
+            currentCaptionIndex = 0;
+        }
+        updateCaptionBox();
+    });
+
+    document.getElementById("reset-button").addEventListener("click", function() {
+        resetSound.play();
+        usedCaptions = [];
+        localStorage.removeItem('usedCaptions');
+        captionsArray = captions;
+        currentCaptionIndex = 0;
+        updateCaptionBox();
+    });
+
+    // Initial setup
+    loadCaptions();
     </script>
 
 </body>
