@@ -181,6 +181,14 @@
     const goodNightSound = document.getElementById("good-night-sound");
     const birthdaySound = document.getElementById("birthday-sound");
 
+    // Shuffle function to randomize captions
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]]; // Swap elements
+        }
+    }
+
     // Load captions from files
     async function loadCaptions() {
         try {
@@ -221,6 +229,7 @@
     document.getElementById("good-morning-button").addEventListener("click", function() {
         goodMorningSound.play(); // Play sound for Good Morning button
         captionsArray = goodMorningCaptions.filter(c => !usedCaptions.includes(c));
+        shuffleArray(captionsArray); // Shuffle captions
         currentCaptionIndex = 0;
         updateCaptionBox();
     });
@@ -228,6 +237,7 @@
     document.getElementById("good-night-button").addEventListener("click", function() {
         goodNightSound.play(); // Play sound for Good Night button
         captionsArray = goodNightCaptions.filter(c => !usedCaptions.includes(c));
+        shuffleArray(captionsArray); // Shuffle captions
         currentCaptionIndex = 0;
         updateCaptionBox();
     });
@@ -235,6 +245,7 @@
     document.getElementById("birthday-button").addEventListener("click", function() {
         birthdaySound.play(); // Play sound for Birthday button
         captionsArray = birthdayCaptions.filter(c => !usedCaptions.includes(c));
+        shuffleArray(captionsArray); // Shuffle captions
         currentCaptionIndex = 0;
         updateCaptionBox();
     });
@@ -264,6 +275,7 @@
         usedCaptions = [];
         localStorage.removeItem('usedCaptions');
         captionsArray = captions;
+        shuffleArray(captionsArray); // Shuffle captions
         currentCaptionIndex = 0;
         updateCaptionBox();
     });
