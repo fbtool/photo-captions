@@ -182,81 +182,88 @@
     const goodNightSound = document.getElementById("good-night-sound");
     const birthdaySound = document.getElementById("birthday-sound");
 
-    // Load captions from files
-    async function loadCaptions() {
-        try {
-            const response = await fetch('captions.txt');
-            const text = await response.text();
-            captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
-
-            const morningResponse = await fetch('goodmorning.txt');
-            const morningText = await morningResponse.text();
-            goodMorningCaptions = morningText.split('----').map(c => c.trim());
-
-            const nightResponse = await fetch('goodnight.txt');
-            const nightText = await nightResponse.text();
-            goodNightCaptions = nightText.split('----').map(c => c.trim());
-
-            const birthdayResponse = await fetch('birthday.txt');
-            const birthdayText = await birthdayResponse.text();
-            birthdayCaptions = birthdayText.split('----').map(c => c.trim());
-
-            captionsArray = captions; // Set to default category captions
-            updateCaptionBox();
-        } catch (error) {
-            captionBox.value = "Error loading captions!";
-            console.error(error);
-        }
+    // Function to shuffle an array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
+}
 
-    // Update the caption box
-    function updateCaptionBox() {
-        if (captionsArray.length > 0) {
-            captionBox.value = captionsArray[currentCaptionIndex];
-        } else {
-            captionBox.value = "No more captions!";
-        }
+// Load captions from files
+async function loadCaptions() {
+    try {
+        const response = await fetch('captions.txt');
+        const text = await response.text();
+        captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
+
+        const morningResponse = await fetch('goodmorning.txt');
+        const morningText = await morningResponse.text();
+        goodMorningCaptions = morningText.split('----').map(c => c.trim());
+
+        const nightResponse = await fetch('goodnight.txt');
+        const nightText = await nightResponse.text();
+        goodNightCaptions = nightText.split('----').map(c => c.trim());
+
+        const birthdayResponse = await fetch('birthday.txt');
+        const birthdayText = await birthdayResponse.text();
+        birthdayCaptions = birthdayText.split('----').map(c => c.trim());
+
+        // Shuffle the captions for random order
+        shuffleArray(captions);
+        shuffleArray(goodMorningCaptions);
+        shuffleArray(goodNightCaptions);
+        shuffleArray(birthdayCaptions);
+
+        // Set to default category captions and display the first one
+        captionsArray = captions;
+        currentCaptionIndex = 0;
+        updateCaptionBox();
+    } catch (error) {
+        captionBox.value = "Error loading captions!";
+        console.error(error);
     }
+}
 
-    // Button handlers for switching between files
-    document.getElementById("good-morning-button").addEventListener("click", function() {
-        goodMorningSound.play(); // Play sound for Good Morning button
-        captionsArray = goodMorningCaptions.filter(c => !usedCaptions.includes(c));
-        currentCaptionIndex = 0;
-        updateCaptionBox();
-    });
+// Update the caption box
+function updateCaptionBox() {
+    if (captionsArray.length > 0) {
+        captionBox.value = captionsArray[currentCaptionIndex];
+    } else {
+        captionBox.value = "No more captions!";
+    }
+}
 
-    document.getElementById("good-night-button").addEventListener("click", function() {
-        goodNightSound.play(); // Play sound for Good Night button
-        captionsArray = goodNightCaptions.filter(c => !usedCaptions.includes(c));
-        currentCaptionIndex = 0;
-        updateCaptionBox();
-    });
+// Button handlers for switching categories
+document.getElementById("good-morning-button").addEventListener("click", function () {
+    goodMorningSound.play();
+    captionsArray = goodMorningCaptions;
+    currentCaptionIndex = 0; // Start from the first caption of the selected category
+    shuffleArray(captionsArray); // Shuffle for randomness
+    updateCaptionBox();
+});
 
-    document.getElementById("birthday-button").addEventListener("click", function() {
-        birthdaySound.play(); // Play sound for Birthday button
-        captionsArray = birthdayCaptions.filter(c => !usedCaptions.includes(c));
-        currentCaptionIndex = 0;
-        updateCaptionBox();
-    });
+document.getElementById("good-night-button").addEventListener("click", function () {
+    goodNightSound.play();
+    captionsArray = goodNightCaptions;
+    currentCaptionIndex = 0;
+    shuffleArray(captionsArray); // Shuffle for randomness
+    updateCaptionBox();
+});
 
-    document.getElementById("previous-button").addEventListener("click", function() {
-        clickSound.play();
-        if (currentCaptionIndex > 0) {
-            currentCaptionIndex--;
-        } else {
-            currentCaptionIndex = captionsArray.length - 1;
-        }
-        updateCaptionBox();
-    });
+document.getElementById("birthday-button").addEventListener("click", function () {
+    birthdaySound.play();
+    captionsArray = birthdayCaptions;
+    currentCaptionIndex = 0;
+    shuffleArray(captionsArray); // Shuffle for randomness
+    updateCaptionBox();
+});
 
-    document.getElementById("next-button").addEventListener("click", function() {
-        clickSound.play();
-        if (currentCaptionIndex < captionsArray.length - 1) {
-            currentCaptionIndex++;
-        } else {
-            currentCaptionIndex = 0;
-        }
+// Button handler for "Next"
+document.getElementById("next-button").addEventListener("click", function () {
+    clickSound.play();
+    if (captionsArray.length > 0) {
+        currentCaptionIndex = (currentCaptionIndex + 1) % captionsArray.length;
         updateCaptionBox();
 
         // Copy the current caption to the clipboard
@@ -267,19 +274,11 @@
             .catch(err => {
                 console.error('Error copying caption to clipboard: ', err);
             });
-    });
+    }
+});
 
-    document.getElementById("reset-button").addEventListener("click", function() {
-        resetSound.play();
-        usedCaptions = [];
-        localStorage.removeItem('usedCaptions');
-        captionsArray = captions;
-        currentCaptionIndex = 0;
-        updateCaptionBox();
-    });
-
-    // Initial setup
-    loadCaptions();
+// Load captions on page load
+loadCaptions();
     </script>
 
 </body>
