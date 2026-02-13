@@ -1,0 +1,407 @@
+This refresh focuses on a **"Modern Glassmorphism"** aesthetic. It retains your exact JavaScript logic and file structure but upgrades the visual hierarchy, color palette, and interactivity to feel like a modern mobile app.
+
+Here is the refreshed code. You can replace your entire file with this.
+
+### Key Changes:
+
+1. **Visual Polish:** Replaced the flat colors with a deep, modern gradient background and semi-transparent "glass" containers.
+2. **Typography:** Improved spacing and font weights for better readability.
+3. **Visual Feedback:** Added a "Copied!" toast notification that appears when you click Next, so the user *knows* the text is in their clipboard.
+4. **Layout:** Grouped the Category buttons (Morning/Night/Birthday) separate from the Navigation buttons (Next/Prev) for better logic.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Captions 💥</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-morning: #FFD166;
+            --accent-night: #118AB2;
+            --accent-bday: #EF476F;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            background: -webkit-linear-gradient(#fff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        /* The Caption Area */
+        .caption-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        #caption-box {
+            width: 100%;
+            height: 160px;
+            font-size: 20px;
+            line-height: 1.6;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            resize: none;
+            outline: none;
+            text-align: center;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        #caption-box:focus {
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(118, 75, 162, 0.2);
+        }
+
+        /* Category Buttons */
+        .category-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .cat-btn {
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .cat-btn:hover {
+            transform: translateY(-2px);
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .cat-btn.active-morning { background: rgba(255, 209, 102, 0.15); color: var(--accent-morning); border-color: var(--accent-morning); }
+        .cat-btn.active-night { background: rgba(17, 138, 178, 0.15); color: var(--accent-night); border-color: var(--accent-night); }
+        .cat-btn.active-bday { background: rgba(239, 71, 111, 0.15); color: var(--accent-bday); border-color: var(--accent-bday); }
+
+        /* Navigation Buttons */
+        .nav-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #next-button {
+            background: var(--primary-gradient);
+            color: white;
+            flex-grow: 2;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #next-button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        #next-button:active { transform: scale(0.98); }
+
+        #previous-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            flex-grow: 1;
+        }
+        #previous-button:hover { background: rgba(255, 255, 255, 0.2); }
+
+        #reset-button {
+            background: transparent;
+            color: #ff6b6b;
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 20px;
+            border-bottom: 1px dashed transparent;
+            padding: 5px;
+        }
+        #reset-button:hover { opacity: 1; border-color: #ff6b6b; }
+
+        /* Toast Notification */
+        .toast {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+        .toast.show { opacity: 1; }
+
+        @media (max-width: 600px) {
+            .container { width: 95%; padding: 25px 20px; }
+            h1 { font-size: 24px; }
+            #caption-box { font-size: 16px; height: 140px; padding: 20px; }
+            .category-group { gap: 5px; }
+            .cat-btn { font-size: 12px; padding: 10px 5px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Photo Captions ✨</h1>
+        
+        <div class="caption-wrapper">
+            <textarea id="caption-box" readonly placeholder="Loading captions..."></textarea>
+            <div id="copy-toast" class="toast">Copied to clipboard! 📋</div>
+        </div>
+
+        <div class="category-group">
+            <button id="good-morning-button" class="cat-btn">Morning 🌻</button>
+            <button id="good-night-button" class="cat-btn">Night 🌛</button>
+            <button id="birthday-button" class="cat-btn">Birthday 🎁</button>
+        </div>
+
+        <div class="nav-group">
+            <button id="previous-button" class="action-btn">Previous</button>
+            <button id="next-button" class="action-btn">Next & Copy ➝</button>
+        </div>
+
+        <button id="reset-button">Reset History</button>
+    </div>
+
+    <audio id="reset-sound" src="reset.mp3"></audio>
+    <audio id="click-sound" src="click.mp3"></audio>
+    <audio id="good-morning-sound" src="notification.mp3"></audio>
+    <audio id="good-night-sound" src="notification.mp3"></audio>
+    <audio id="birthday-sound" src="notification.mp3"></audio>
+
+    <script>
+        let captions = [];
+        let goodMorningCaptions = [];
+        let goodNightCaptions = [];
+        let birthdayCaptions = [];
+        let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
+        let currentCaptionIndex = 0;
+        let captionsArray = [];
+        const captionBox = document.getElementById("caption-box");
+        const resetSound = document.getElementById("reset-sound");
+        const clickSound = document.getElementById("click-sound");
+        const goodMorningSound = document.getElementById("good-morning-sound");
+        const goodNightSound = document.getElementById("good-night-sound");
+        const birthdaySound = document.getElementById("birthday-sound");
+        
+        // UI Helpers
+        const toast = document.getElementById("copy-toast");
+        const catBtns = document.querySelectorAll('.cat-btn');
+
+        function setActiveCategory(btnId, className) {
+            catBtns.forEach(btn => {
+                btn.classList.remove('active-morning', 'active-night', 'active-bday');
+                btn.style.opacity = '0.6';
+            });
+            const activeBtn = document.getElementById(btnId);
+            activeBtn.classList.add(className);
+            activeBtn.style.opacity = '1';
+        }
+
+        function showToast() {
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 1500);
+        }
+
+        // Function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Load captions from files
+        async function loadCaptions() {
+            try {
+                const response = await fetch('captions.txt');
+                const text = await response.text();
+                captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
+
+                const morningResponse = await fetch('goodmorning.txt');
+                const morningText = await morningResponse.text();
+                goodMorningCaptions = morningText.split('----').map(c => c.trim());
+
+                const nightResponse = await fetch('goodnight.txt');
+                const nightText = await nightResponse.text();
+                goodNightCaptions = nightText.split('----').map(c => c.trim());
+
+                const birthdayResponse = await fetch('birthday.txt');
+                const birthdayText = await birthdayResponse.text();
+                birthdayCaptions = birthdayText.split('----').map(c => c.trim());
+
+                // Shuffle the captions for random order
+                shuffleArray(captions);
+                shuffleArray(goodMorningCaptions);
+                shuffleArray(goodNightCaptions);
+                shuffleArray(birthdayCaptions);
+
+                // Set to default category
+                captionsArray = captions;
+                currentCaptionIndex = 0;
+                showCaption();
+            } catch (error) {
+                captionBox.value = "Error loading captions!";
+                console.error(error);
+            }
+        }
+
+        function showCaption() {
+            if (captionsArray.length > 0) {
+                captionBox.value = captionsArray[currentCaptionIndex];
+            } else {
+                captionBox.value = "No more captions!";
+            }
+        }
+
+        // Button handlers
+        document.getElementById("good-morning-button").addEventListener("click", function () {
+            goodMorningSound.play();
+            captionsArray = goodMorningCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray);
+            showCaption();
+            setActiveCategory('good-morning-button', 'active-morning');
+        });
+
+        document.getElementById("good-night-button").addEventListener("click", function () {
+            goodNightSound.play();
+            captionsArray = goodNightCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray);
+            showCaption();
+            setActiveCategory('good-night-button', 'active-night');
+        });
+
+        document.getElementById("birthday-button").addEventListener("click", function () {
+            birthdaySound.play();
+            captionsArray = birthdayCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray);
+            showCaption();
+            setActiveCategory('birthday-button', 'active-bday');
+        });
+
+        function copyAndNext() {
+            const currentCaption = captionBox.value;
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(currentCaption)
+                .then(() => {
+                    console.log('Copied to clipboard:', currentCaption);
+                    showToast(); // Show visual feedback
+                })
+                .catch(err => {
+                    console.error('Could not copy text:', err);
+                });
+
+            // Move to next
+            currentCaptionIndex = (currentCaptionIndex + 1) % captionsArray.length;
+            showCaption();
+        }
+
+        document.getElementById("next-button").addEventListener("click", function () {
+            clickSound.play();
+            copyAndNext();
+        });
+
+        document.getElementById("previous-button").addEventListener("click", function () {
+            clickSound.play();
+            if (captionsArray.length > 0) {
+                currentCaptionIndex = (currentCaptionIndex - 1 + captionsArray.length) % captionsArray.length;
+                showCaption();
+            }
+        });
+
+        document.getElementById("reset-button").addEventListener("click", function () {
+            resetSound.play();
+            localStorage.removeItem('usedCaptions');
+            usedCaptions = [];
+            currentCaptionIndex = 0;
+            captionsArray = captions;
+            shuffleArray(captionsArray);
+            showCaption();
+            
+            // Reset visual state
+            catBtns.forEach(btn => {
+                btn.classList.remove('active-morning', 'active-night', 'active-bday');
+                btn.style.opacity = '1';
+            });
+        });
+
+        // Load captions on page load
+        loadCaptions();
+
+    </script>
+</body>
+</html>
+
+```
