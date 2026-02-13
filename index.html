@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Captions Generator</title>
+    <title>Photo Captions💥</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         * {
@@ -16,148 +22,339 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #121212;
+            background: #000000;
             color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
         }
 
+
         .container {
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 20px;
-            width: 120%;
-            max-width: 800px;
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
+            background: #2a2a2a;
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.7), 
+                        0px 0px 0px 1px rgba(255, 255, 255, 0.1);
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #ff8f00;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff8f00 0%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
         }
 
         .info {
             font-size: 14px;
-            margin-bottom: 15px;
-            color: #bbb;
+            margin-bottom: 30px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .caption-counter {
+            font-size: 15px;
+            margin-bottom: 20px;
+            color: #ff8f00;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(255, 143, 0, 0.1);
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px solid rgba(255, 143, 0, 0.2);
+        }
+
+        .caption-counter i {
+            margin-right: 8px;
         }
 
         #caption-box {
             width: 100%;
-            height: 150px;
+            min-height: 180px;
             font-size: 18px;
-            padding: 50px;
-            border: none;
-            border-radius: 10px;
-            background-color: #262626;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(38, 38, 38, 0.6);
             color: #fff;
             resize: none;
             overflow-y: auto;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-align: center;
+            font-weight: 500;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #caption-box:focus {
+            outline: none;
+            border-color: rgba(255, 143, 0, 0.5);
+            background: rgba(38, 38, 38, 0.8);
+        }
+
+        .category-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         button {
-            padding: 10px 15px;
-            margin: 5px;
-            font-size: 16px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            background-color: #f15c95;
             color: #fff;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 140px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        button:hover {
-            background-color: #ff78ab;
+        button i {
+            margin-right: 8px;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:active {
+            transform: scale(0.95);
         }
 
         button:disabled {
-            background-color: #444;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
             cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        button.active {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 
+                        0 6px 25px rgba(255, 143, 0, 0.5);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        button.active::after {
+            content: '✓';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Keep hover effect locked on active button */
+        button.active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Good Morning Button */
+        .good-morning {
+            background-image: linear-gradient(109.6deg, rgba(0,204,130,1) 11.2%, rgba(58,181,46,1) 91.7%);
+        }
+
+        .good-morning:hover {
+            background-image: linear-gradient(109.6deg, rgba(0,224,150,1) 11.2%, rgba(78,201,66,1) 91.7%);
+            box-shadow: 0 6px 25px rgba(0, 204, 130, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .good-morning.active {
+            background-image: linear-gradient(109.6deg, rgba(0,224,150,1) 11.2%, rgba(78,201,66,1) 91.7%);
+            box-shadow: 0 0 0 3px rgba(0, 204, 130, 0.4), 
+                        0 6px 25px rgba(0, 204, 130, 0.6);
+        }
+
+        /* Good Night Button */
+        .good-night {
+            background-image: linear-gradient(107.7deg, rgba(235,230,44,0.55) 8.4%, rgba(252,152,15,1) 90.3%);
+        }
+
+        .good-night:hover {
+            background-image: linear-gradient(107.7deg, rgba(245,240,64,0.65) 8.4%, rgba(255,167,35,1) 90.3%);
+            box-shadow: 0 6px 25px rgba(252, 152, 15, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .good-night.active {
+            background-image: linear-gradient(107.7deg, rgba(245,240,64,0.65) 8.4%, rgba(255,167,35,1) 90.3%);
+            box-shadow: 0 0 0 3px rgba(252, 152, 15, 0.4), 
+                        0 6px 25px rgba(252, 152, 15, 0.6);
+        }
+
+        /* Birthday Button */
+        .birthday {
+            background-image: radial-gradient(circle farthest-corner at -2.4% -3.8%, rgba(248,166,10,1) 0%, rgba(209,38,16,1) 90%);
+        }
+
+        .birthday:hover {
+            background-image: radial-gradient(circle farthest-corner at -2.4% -3.8%, rgba(255,186,30,1) 0%, rgba(229,58,36,1) 90%);
+            box-shadow: 0 6px 25px rgba(248, 166, 10, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .birthday.active {
+            background-image: radial-gradient(circle farthest-corner at -2.4% -3.8%, rgba(255,186,30,1) 0%, rgba(229,58,36,1) 90%);
+            box-shadow: 0 0 0 3px rgba(248, 166, 10, 0.4), 
+                        0 6px 25px rgba(248, 166, 10, 0.6);
+        }
+
+        /* Control Buttons */
+        #previous-button,
+        #next-button {
+            background: #304FFE;
+            min-width: 110px;
+        }
+
+        #previous-button:hover,
+        #next-button:hover {
+            background: #4d68ff;
+            box-shadow: 0 6px 25px rgba(48, 79, 254, 0.5);
+            transform: translateY(-2px);
+        }
+
+        #reset-button {
+            background: linear-gradient(135deg, #fb3030 0%, #a31428 100%);
+            min-width: 110px;
+        }
+
+        #reset-button:hover {
+            background: linear-gradient(135deg, #ff4747 0%, #b81f35 100%);
+            box-shadow: 0 6px 25px rgba(251, 48, 48, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar Styling */
+        #caption-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #caption-box::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        #caption-box::-webkit-scrollbar-thumb {
+            background: rgba(255, 143, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        #caption-box::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 143, 0, 0.7);
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
             h1 {
-                font-size: 20px;
+                font-size: 26px;
             }
 
             #caption-box {
-                font-size: 14px;
-                height: 150px;
+                font-size: 16px;
+                min-height: 150px;
+                padding: 20px;
             }
 
             button {
                 font-size: 14px;
+                padding: 12px 18px;
+                min-width: 120px;
+            }
+
+            .category-buttons,
+            .control-buttons {
+                gap: 10px;
             }
         }
-             /* Good Morning Button Style */
-            .good-morning {
-                background-color: #542387;
-                color: #cb99fd;
-                border-radius: 10px;
-                padding: 10px 20px;
-                font-size: 16px;
-                transition: background-color 0.3s ease;
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 22px;
             }
 
-            .good-morning:hover {
-                background-color: #000000;
-                color: #ffffff;
+            button {
+                min-width: 100px;
+                font-size: 13px;
             }
-
-            /* Good Night Button Style */
-            .good-night {
-                background-color: #2a5c4b; /* Customize color */
-                color: #deedfa;
-                border-radius: 8px;
-                padding: 10px 20px;
-                font-size: 16px;
-                transition: background-color 0.3s ease;
-            }
-
-            .good-night:hover {
-                background-color: #000000;
-                color: #ffffff;
-            }
-
-            /* Birthday Button Style */
-            .birthday {
-                background-color: #694317; /* Customize color */
-                color: #e98c00;
-                border-radius: 8px;
-                padding: 10px 20px;
-                font-size: 16px;
-                transition: background-color 0.3s ease;
-            }
-
-            .birthday:hover {
-                background-color: #000000;
-                color: #ffffff;
-            }
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
-        <h1>Photos Captions</h1>
+        <h1>Photo Captions 💥</h1>
+        <div class="caption-counter" id="caption-counter">Loading...</div>
         <textarea id="caption-box" readonly></textarea>
-        <div>
+        
+        <div class="category-buttons">
             <button id="good-morning-button" class="good-morning">Good Morning 🌻</button>
             <button id="good-night-button" class="good-night">Good Night 🌛</button>
-            <button id="birthday-button" class="birthday">Birthday 🎁</button>            
+            <button id="birthday-button" class="birthday">Birthday 🎁</button>
         </div>
-        <div>
-            <button id="previous-button">Previous</button>
-            <button id="next-button">Next</button>
-            <button id="reset-button">Reset</button>
+        
+        <div class="control-buttons">
+            <button id="previous-button"><i class="fas fa-chevron-left"></i>Previous</button>
+            <button id="next-button"><i class="fas fa-chevron-right"></i>Next</button>
+            <button id="reset-button"><i class="fas fa-redo-alt"></i>Reset</button>
         </div>
     </div>
 
@@ -168,145 +365,198 @@
     <audio id="birthday-sound" src="notification.mp3"></audio>
 
     <script>
-    let captions = [];
-    let goodMorningCaptions = [];
-    let goodNightCaptions = [];
-    let birthdayCaptions = [];
-    let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
-    let currentCaptionIndex = 0;
-    let captionsArray = [];
-    const captionBox = document.getElementById("caption-box");
-    const resetSound = document.getElementById("reset-sound");
-    const clickSound = document.getElementById("click-sound");
-    const goodMorningSound = document.getElementById("good-morning-sound");
-    const goodNightSound = document.getElementById("good-night-sound");
-    const birthdaySound = document.getElementById("birthday-sound");
+        let captions = [];
+        let goodMorningCaptions = [];
+        let goodNightCaptions = [];
+        let birthdayCaptions = [];
+        let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
+        let currentCaptionIndex = 0;
+        let captionsArray = [];
+        let currentCategory = 'default'; // Track current category
+        const captionBox = document.getElementById("caption-box");
+        const captionCounter = document.getElementById("caption-counter");
+        const resetSound = document.getElementById("reset-sound");
+        const clickSound = document.getElementById("click-sound");
+        const goodMorningSound = document.getElementById("good-morning-sound");
+        const goodNightSound = document.getElementById("good-night-sound");
+        const birthdaySound = document.getElementById("birthday-sound");
 
-    // Function to shuffle an array
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
-    // Load captions from files
-    async function loadCaptions() {
-        try {
-            const response = await fetch('captions.txt');
-            const text = await response.text();
-            captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
-
-            const morningResponse = await fetch('goodmorning.txt');
-            const morningText = await morningResponse.text();
-            goodMorningCaptions = morningText.split('----').map(c => c.trim());
-
-            const nightResponse = await fetch('goodnight.txt');
-            const nightText = await nightResponse.text();
-            goodNightCaptions = nightText.split('----').map(c => c.trim());
-
-            const birthdayResponse = await fetch('birthday.txt');
-            const birthdayText = await birthdayResponse.text();
-            birthdayCaptions = birthdayText.split('----').map(c => c.trim());
-
-            // Shuffle the captions for random order
-            shuffleArray(captions);
-            shuffleArray(goodMorningCaptions);
-            shuffleArray(goodNightCaptions);
-            shuffleArray(birthdayCaptions);
-
-            // Set to default category captions and display the first one
-            captionsArray = captions;
-            currentCaptionIndex = 0;
-            showCaption();
-        } catch (error) {
-            captionBox.value = "Error loading captions!";
-            console.error(error);
-        }
-    }
-
-    // Function to display the current caption in the caption box
-    function showCaption() {
-        if (captionsArray.length > 0) {
-            captionBox.value = captionsArray[currentCaptionIndex];
-        } else {
-            captionBox.value = "No more captions!";
-        }
-    }
-
-    // Button handlers for switching categories
-    document.getElementById("good-morning-button").addEventListener("click", function () {
-        goodMorningSound.play();
-        captionsArray = goodMorningCaptions;
-        currentCaptionIndex = 0; // Start from the first caption of the selected category
-        shuffleArray(captionsArray); // Shuffle for randomness
-        showCaption();
-    });
-
-    document.getElementById("good-night-button").addEventListener("click", function () {
-        goodNightSound.play();
-        captionsArray = goodNightCaptions;
-        currentCaptionIndex = 0;
-        shuffleArray(captionsArray); // Shuffle for randomness
-        showCaption();
-    });
-
-    document.getElementById("birthday-button").addEventListener("click", function () {
-        birthdaySound.play();
-        captionsArray = birthdayCaptions;
-        currentCaptionIndex = 0;
-        shuffleArray(captionsArray); // Shuffle for randomness
-        showCaption();
-    });
-
-    // Function to copy the current caption and move to the next
-    function copyAndNext() {
-        const currentCaption = captionBox.value;
-
-        // Copy the current caption to clipboard
-        navigator.clipboard.writeText(currentCaption)
-            .then(() => {
-                console.log('Copied to clipboard:', currentCaption);
-            })
-            .catch(err => {
-                console.error('Could not copy text:', err);
+        // Function to update the active button state
+        function updateActiveButton(category) {
+            // Remove active class from all category buttons
+            document.querySelectorAll('.category-buttons button').forEach(btn => {
+                btn.classList.remove('active');
             });
 
-        // Move to the next caption
-        currentCaptionIndex = (currentCaptionIndex + 1) % captionsArray.length;
-        showCaption();
-    }
+            // Add active class to the selected button
+            if (category === 'morning') {
+                document.getElementById('good-morning-button').classList.add('active');
+            } else if (category === 'night') {
+                document.getElementById('good-night-button').classList.add('active');
+            } else if (category === 'birthday') {
+                document.getElementById('birthday-button').classList.add('active');
+            }
+        }
 
-    // Button handler for "Next"
-    document.getElementById("next-button").addEventListener("click", function () {
-        clickSound.play();
-        copyAndNext();
-    });
+        // Function to update caption counter
+        function updateCounter() {
+            const total = captionsArray.length;
+            const current = currentCaptionIndex + 1;
+            let categoryName = '';
+            
+            switch(currentCategory) {
+                case 'morning':
+                    categoryName = 'Good Morning';
+                    break;
+                case 'night':
+                    categoryName = 'Good Night';
+                    break;
+                case 'birthday':
+                    categoryName = 'Birthday';
+                    break;
+                default:
+                    categoryName = 'General';
+            }
+            
+            captionCounter.innerHTML = `<i class="fas fa-list-ol"></i>${categoryName}: ${current} of ${total}`;
+        }
 
-    // Button handler for "Previous"
-    document.getElementById("previous-button").addEventListener("click", function () {
-        clickSound.play();
-        if (captionsArray.length > 0) {
-            currentCaptionIndex = (currentCaptionIndex - 1 + captionsArray.length) % captionsArray.length;
+        // Function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Load captions from files
+        async function loadCaptions() {
+            try {
+                const response = await fetch('captions.txt');
+                const text = await response.text();
+                captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
+
+                const morningResponse = await fetch('goodmorning.txt');
+                const morningText = await morningResponse.text();
+                goodMorningCaptions = morningText.split('----').map(c => c.trim());
+
+                const nightResponse = await fetch('goodnight.txt');
+                const nightText = await nightResponse.text();
+                goodNightCaptions = nightText.split('----').map(c => c.trim());
+
+                const birthdayResponse = await fetch('birthday.txt');
+                const birthdayText = await birthdayResponse.text();
+                birthdayCaptions = birthdayText.split('----').map(c => c.trim());
+
+                // Shuffle the captions for random order
+                shuffleArray(captions);
+                shuffleArray(goodMorningCaptions);
+                shuffleArray(goodNightCaptions);
+                shuffleArray(birthdayCaptions);
+
+                // Set to default category captions and display the first one
+                captionsArray = captions;
+                currentCaptionIndex = 0;
+                showCaption();
+            } catch (error) {
+                captionBox.value = "Error loading captions!";
+                console.error(error);
+            }
+        }
+
+        // Function to display the current caption in the caption box
+        function showCaption() {
+            if (captionsArray.length > 0) {
+                captionBox.value = captionsArray[currentCaptionIndex];
+                updateCounter();
+            } else {
+                captionBox.value = "No more captions!";
+                captionCounter.textContent = "No captions available";
+            }
+        }
+
+        // Button handlers for switching categories
+        document.getElementById("good-morning-button").addEventListener("click", function () {
+            goodMorningSound.play();
+            captionsArray = goodMorningCaptions;
+            currentCaptionIndex = 0; // Start from the first caption of the selected category
+            currentCategory = 'morning';
+            shuffleArray(captionsArray); // Shuffle for randomness
+            updateActiveButton('morning');
+            showCaption();
+        });
+
+        document.getElementById("good-night-button").addEventListener("click", function () {
+            goodNightSound.play();
+            captionsArray = goodNightCaptions;
+            currentCaptionIndex = 0;
+            currentCategory = 'night';
+            shuffleArray(captionsArray); // Shuffle for randomness
+            updateActiveButton('night');
+            showCaption();
+        });
+
+        document.getElementById("birthday-button").addEventListener("click", function () {
+            birthdaySound.play();
+            captionsArray = birthdayCaptions;
+            currentCaptionIndex = 0;
+            currentCategory = 'birthday';
+            shuffleArray(captionsArray); // Shuffle for randomness
+            updateActiveButton('birthday');
+            showCaption();
+        });
+
+        // Function to copy the current caption and move to the next
+        function copyAndNext() {
+            const currentCaption = captionBox.value;
+
+            // Copy the current caption to clipboard
+            navigator.clipboard.writeText(currentCaption)
+                .then(() => {
+                    console.log('Copied to clipboard:', currentCaption);
+                })
+                .catch(err => {
+                    console.error('Could not copy text:', err);
+                });
+
+            // Move to the next caption
+            currentCaptionIndex = (currentCaptionIndex + 1) % captionsArray.length;
             showCaption();
         }
-    });
 
-    // Button handler for "Reset"
-    document.getElementById("reset-button").addEventListener("click", function () {
-        resetSound.play();
-        localStorage.removeItem('usedCaptions');
-        usedCaptions = [];
-        currentCaptionIndex = 0;
-        captionsArray = captions; // Reset to default category
-        shuffleArray(captionsArray); // Shuffle captions
-        showCaption();
-    });
+        // Button handler for "Next"
+        document.getElementById("next-button").addEventListener("click", function () {
+            clickSound.play();
+            copyAndNext();
+        });
 
-    // Load captions on page load
-    loadCaptions();
+        // Button handler for "Previous"
+        document.getElementById("previous-button").addEventListener("click", function () {
+            clickSound.play();
+            if (captionsArray.length > 0) {
+                currentCaptionIndex = (currentCaptionIndex - 1 + captionsArray.length) % captionsArray.length;
+                showCaption();
+            }
+        });
+
+        // Button handler for "Reset"
+        document.getElementById("reset-button").addEventListener("click", function () {
+            resetSound.play();
+            localStorage.removeItem('usedCaptions');
+            usedCaptions = [];
+            currentCaptionIndex = 0;
+            currentCategory = 'default';
+            captionsArray = captions; // Reset to default category
+            shuffleArray(captionsArray); // Shuffle captions
+            updateActiveButton(''); // Remove all active states
+            showCaption();
+        });
+
+        // Load captions on page load
+        loadCaptions();
 
     </script>
 
 </body>
+
 </html>
