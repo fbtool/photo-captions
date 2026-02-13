@@ -456,7 +456,9 @@
             goodMorningSound.play();
             captionsArray = goodMorningCaptions;
             currentCaptionIndex = 0; // Start from the first caption of the selected category
+            currentCategory = 'morning';
             shuffleArray(captionsArray); // Shuffle for randomness
+            updateActiveButton('morning');
             showCaption();
         });
 
@@ -464,7 +466,9 @@
             goodNightSound.play();
             captionsArray = goodNightCaptions;
             currentCaptionIndex = 0;
+            currentCategory = 'night';
             shuffleArray(captionsArray); // Shuffle for randomness
+            updateActiveButton('night');
             showCaption();
         });
 
@@ -472,7 +476,9 @@
             birthdaySound.play();
             captionsArray = birthdayCaptions;
             currentCaptionIndex = 0;
+            currentCategory = 'birthday';
             shuffleArray(captionsArray); // Shuffle for randomness
+            updateActiveButton('birthday');
             showCaption();
         });
 
@@ -515,8 +521,10 @@
             localStorage.removeItem('usedCaptions');
             usedCaptions = [];
             currentCaptionIndex = 0;
+            currentCategory = 'default';
             captionsArray = captions; // Reset to default category
             shuffleArray(captionsArray); // Shuffle captions
+            updateActiveButton(''); // Remove all active states
             showCaption();
         });
 
