@@ -3,91 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Captions 💥</title>
+    <title>Photo Captions ⚡️</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
-            --accent-morning: #FFD166;
-            --accent-night: #118AB2;
-            --accent-bday: #EF476F;
-        }
-
+        /* --- RESET & BASICS --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #0f0c29;
-            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
-            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            background-color: #050505; /* Deepest Black */
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
+        /* --- MAIN CARD --- */
         .container {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px 30px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            text-align: center;
+            background-color: #121212; /* Matte Dark Grey */
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.8);
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Accent Line */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
         }
 
         h1 {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
             margin-bottom: 25px;
-            background: -webkit-linear-gradient(#fff, #a0a0a0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            text-align: left;
             letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* The Caption Area */
-        .caption-wrapper {
-            position: relative;
-            margin-bottom: 30px;
-        }
+        h1 span { font-size: 1.2em; }
+
+        /* --- CAPTION BOX --- */
+        .caption-wrapper { position: relative; margin-bottom: 25px; }
 
         #caption-box {
             width: 100%;
-            height: 160px;
-            font-size: 20px;
+            height: 140px;
+            background-color: #080808;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
             line-height: 1.6;
-            padding: 30px;
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            background-color: rgba(0, 0, 0, 0.3);
-            color: #fff;
+            padding: 20px;
             resize: none;
             outline: none;
-            text-align: center;
-            font-family: inherit;
-            transition: all 0.3s ease;
+            transition: border-color 0.2s;
         }
 
         #caption-box:focus {
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 15px rgba(118, 75, 162, 0.2);
+            border-color: #666;
         }
 
-        /* Category Buttons */
-        .category-group {
+        /* --- BUTTONS GENERAL --- */
+        button {
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+        }
+
+        button:active { transform: scale(0.96); }
+
+        /* --- CATEGORY BUTTONS (GRID) --- */
+        .category-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
@@ -95,100 +102,95 @@
         }
 
         .cat-btn {
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
+            padding: 12px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            background-color: #1e1e1e;
+            color: #888;
+            border: 1px solid #2a2a2a;
         }
 
-        .cat-btn:hover {
-            transform: translateY(-2px);
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-        }
+        .cat-btn:hover { background-color: #252525; color: #fff; }
 
-        .cat-btn.active-morning { background: rgba(255, 209, 102, 0.15); color: var(--accent-morning); border-color: var(--accent-morning); }
-        .cat-btn.active-night { background: rgba(17, 138, 178, 0.15); color: var(--accent-night); border-color: var(--accent-night); }
-        .cat-btn.active-bday { background: rgba(239, 71, 111, 0.15); color: var(--accent-bday); border-color: var(--accent-bday); }
+        /* Active States for Categories */
+        .cat-btn.active-morning { background-color: #2E291F; color: #FFD166; border-color: #FFD166; }
+        .cat-btn.active-night { background-color: #1A262E; color: #4CC9F0; border-color: #4CC9F0; }
+        .cat-btn.active-bday { background-color: #2E1A1F; color: #EF476F; border-color: #EF476F; }
 
-        /* Navigation Buttons */
-        .nav-group {
+        /* --- CONTROL BUTTONS --- */
+        .control-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
-        .action-btn {
-            padding: 14px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
+        .btn-main {
+            padding: 16px;
             border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 16px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
-
-        #next-button {
-            background: var(--primary-gradient);
-            color: white;
-            flex-grow: 2;
-            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        #next-button:hover { filter: brightness(1.1); transform: translateY(-1px); }
-        #next-button:active { transform: scale(0.98); }
 
         #previous-button {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            flex-grow: 1;
+            background-color: #1e1e1e;
+            color: #fff;
+            flex-grow: 0;
+            width: 60px; /* Square-ish for back button */
+            border: 1px solid #333;
         }
-        #previous-button:hover { background: rgba(255, 255, 255, 0.2); }
+        #previous-button:hover { background-color: #333; }
 
+        #next-button {
+            background: #ffffff;
+            color: #000000;
+            font-weight: 800;
+        }
+        #next-button:hover { background-color: #e0e0e0; }
+
+        /* --- RESET LINK --- */
+        .footer-actions {
+            margin-top: 25px;
+            text-align: center;
+        }
         #reset-button {
-            background: transparent;
-            color: #ff6b6b;
-            font-size: 14px;
-            opacity: 0.7;
-            margin-top: 20px;
-            border-bottom: 1px dashed transparent;
+            background: none;
+            color: #444;
+            font-size: 12px;
+            text-decoration: underline;
             padding: 5px;
         }
-        #reset-button:hover { opacity: 1; border-color: #ff6b6b; }
+        #reset-button:hover { color: #ff4757; }
 
-        /* Toast Notification */
+        /* --- TOAST NOTIFICATION --- */
         .toast {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
+            top: 20px;
+            right: 20px;
+            background-color: #00c853;
+            color: #000;
+            font-weight: 700;
             padding: 10px 20px;
-            border-radius: 30px;
+            border-radius: 8px;
             font-size: 14px;
             opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
             pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 10;
         }
-        .toast.show { opacity: 1; }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-        @media (max-width: 600px) {
-            .container { width: 95%; padding: 25px 20px; }
-            h1 { font-size: 24px; }
-            #caption-box { font-size: 16px; height: 140px; padding: 20px; }
-            .category-group { gap: 5px; }
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 480px) {
+            .container { padding: 25px; }
+            h1 { font-size: 20px; }
+            #caption-box { font-size: 16px; height: 120px; }
             .cat-btn { font-size: 12px; padding: 10px 5px; }
         }
     </style>
@@ -196,25 +198,28 @@
 
 <body>
     <div class="container">
-        <h1>Photo Captions ✨</h1>
+        <div id="copy-toast" class="toast">Copied! ✓</div>
+
+        <h1><span>⚡️</span> Captions</h1>
         
         <div class="caption-wrapper">
-            <textarea id="caption-box" readonly placeholder="Loading captions..."></textarea>
-            <div id="copy-toast" class="toast">Copied to clipboard! 📋</div>
+            <textarea id="caption-box" readonly></textarea>
         </div>
 
-        <div class="category-group">
+        <div class="category-grid">
             <button id="good-morning-button" class="cat-btn">Morning 🌻</button>
             <button id="good-night-button" class="cat-btn">Night 🌛</button>
             <button id="birthday-button" class="cat-btn">Birthday 🎁</button>
         </div>
 
-        <div class="nav-group">
-            <button id="previous-button" class="action-btn">Previous</button>
-            <button id="next-button" class="action-btn">Next & Copy ➝</button>
+        <div class="control-group">
+            <button id="previous-button" title="Previous">←</button>
+            <button id="next-button" class="btn-main">Next & Copy ➝</button>
         </div>
 
-        <button id="reset-button">Reset History</button>
+        <div class="footer-actions">
+            <button id="reset-button">Reset All History</button>
+        </div>
     </div>
 
     <audio id="reset-sound" src="reset.mp3"></audio>
@@ -238,20 +243,20 @@
         const goodNightSound = document.getElementById("good-night-sound");
         const birthdaySound = document.getElementById("birthday-sound");
         
-        // UI Helpers
+        // UI Reference
         const toast = document.getElementById("copy-toast");
         const catBtns = document.querySelectorAll('.cat-btn');
 
+        // Helper to visually select category
         function setActiveCategory(btnId, className) {
             catBtns.forEach(btn => {
                 btn.classList.remove('active-morning', 'active-night', 'active-bday');
-                btn.style.opacity = '0.6';
             });
             const activeBtn = document.getElementById(btnId);
             activeBtn.classList.add(className);
-            activeBtn.style.opacity = '1';
         }
 
+        // Show "Copied" Toast
         function showToast() {
             toast.classList.add("show");
             setTimeout(() => {
@@ -259,7 +264,7 @@
             }, 1500);
         }
 
-        // Function to shuffle an array
+        // Shuffle Logic
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -267,7 +272,7 @@
             }
         }
 
-        // Load captions from files
+        // Load Data
         async function loadCaptions() {
             try {
                 const response = await fetch('captions.txt');
@@ -286,13 +291,13 @@
                 const birthdayText = await birthdayResponse.text();
                 birthdayCaptions = birthdayText.split('----').map(c => c.trim());
 
-                // Shuffle the captions for random order
+                // Shuffle
                 shuffleArray(captions);
                 shuffleArray(goodMorningCaptions);
                 shuffleArray(goodNightCaptions);
                 shuffleArray(birthdayCaptions);
 
-                // Set to default category
+                // Init
                 captionsArray = captions;
                 currentCaptionIndex = 0;
                 showCaption();
@@ -310,7 +315,8 @@
             }
         }
 
-        // Button handlers
+        // --- EVENT LISTENERS ---
+
         document.getElementById("good-morning-button").addEventListener("click", function () {
             goodMorningSound.play();
             captionsArray = goodMorningCaptions;
@@ -341,17 +347,14 @@
         function copyAndNext() {
             const currentCaption = captionBox.value;
 
-            // Copy to clipboard
+            // Copy
             navigator.clipboard.writeText(currentCaption)
                 .then(() => {
-                    console.log('Copied to clipboard:', currentCaption);
-                    showToast(); // Show visual feedback
+                    showToast();
                 })
-                .catch(err => {
-                    console.error('Could not copy text:', err);
-                });
+                .catch(err => console.error('Copy failed:', err));
 
-            // Move to next
+            // Next
             currentCaptionIndex = (currentCaptionIndex + 1) % captionsArray.length;
             showCaption();
         }
@@ -378,18 +381,13 @@
             shuffleArray(captionsArray);
             showCaption();
             
-            // Reset visual state
-            catBtns.forEach(btn => {
-                btn.classList.remove('active-morning', 'active-night', 'active-bday');
-                btn.style.opacity = '1';
-            });
+            // Reset UI selection
+            catBtns.forEach(btn => btn.classList.remove('active-morning', 'active-night', 'active-bday'));
         });
 
-        // Load captions on page load
+        // Initialize
         loadCaptions();
 
     </script>
 </body>
 </html>
-
-```
