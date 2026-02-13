@@ -82,6 +82,18 @@
             font-weight: 400;
         }
 
+        .caption-counter {
+            font-size: 15px;
+            margin-bottom: 20px;
+            color: #ff8f00;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(255, 143, 0, 0.1);
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px solid rgba(255, 143, 0, 0.2);
+        }
+
         #caption-box {
             width: 100%;
             min-height: 180px;
@@ -164,6 +176,30 @@
             background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
             cursor: not-allowed;
             opacity: 0.5;
+        }
+
+        button.active {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 
+                        0 6px 25px rgba(255, 143, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        button.active::after {
+            content: '✓';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
         }
 
         /* Good Morning Button */
@@ -282,6 +318,7 @@
 
     <div class="container">
         <h1>Photo Captions 💥</h1>
+        <div class="caption-counter" id="caption-counter">Loading...</div>
         <textarea id="caption-box" readonly></textarea>
         
         <div class="category-buttons">
@@ -311,12 +348,54 @@
         let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
         let currentCaptionIndex = 0;
         let captionsArray = [];
+        let currentCategory = 'default'; // Track current category
         const captionBox = document.getElementById("caption-box");
+        const captionCounter = document.getElementById("caption-counter");
         const resetSound = document.getElementById("reset-sound");
         const clickSound = document.getElementById("click-sound");
         const goodMorningSound = document.getElementById("good-morning-sound");
         const goodNightSound = document.getElementById("good-night-sound");
         const birthdaySound = document.getElementById("birthday-sound");
+
+        // Function to update the active button state
+        function updateActiveButton(category) {
+            // Remove active class from all category buttons
+            document.querySelectorAll('.category-buttons button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add active class to the selected button
+            if (category === 'morning') {
+                document.getElementById('good-morning-button').classList.add('active');
+            } else if (category === 'night') {
+                document.getElementById('good-night-button').classList.add('active');
+            } else if (category === 'birthday') {
+                document.getElementById('birthday-button').classList.add('active');
+            }
+        }
+
+        // Function to update caption counter
+        function updateCounter() {
+            const total = captionsArray.length;
+            const current = currentCaptionIndex + 1;
+            let categoryName = '';
+            
+            switch(currentCategory) {
+                case 'morning':
+                    categoryName = 'Good Morning';
+                    break;
+                case 'night':
+                    categoryName = 'Good Night';
+                    break;
+                case 'birthday':
+                    categoryName = 'Birthday';
+                    break;
+                default:
+                    categoryName = 'Default';
+            }
+            
+            captionCounter.textContent = `${categoryName} • Caption ${current} of ${total}`;
+        }
 
         // Function to shuffle an array
         function shuffleArray(array) {
@@ -365,8 +444,10 @@
         function showCaption() {
             if (captionsArray.length > 0) {
                 captionBox.value = captionsArray[currentCaptionIndex];
+                updateCounter();
             } else {
                 captionBox.value = "No more captions!";
+                captionCounter.textContent = "No captions available";
             }
         }
 
