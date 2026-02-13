@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Captions💥</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,143,0,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.7), 
+                        0px 0px 0px 1px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff8f00 0%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .info {
+            font-size: 14px;
+            margin-bottom: 30px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        #caption-box {
+            width: 100%;
+            min-height: 180px;
+            font-size: 18px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(38, 38, 38, 0.6);
+            color: #fff;
+            resize: none;
+            overflow-y: auto;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #caption-box:focus {
+            outline: none;
+            border-color: rgba(255, 143, 0, 0.5);
+            background: rgba(38, 38, 38, 0.8);
+        }
+
+        .category-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 140px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:disabled {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* Good Morning Button */
+        .good-morning {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        }
+
+        .good-morning:hover {
+            box-shadow: 0 6px 25px rgba(106, 17, 203, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Good Night Button */
+        .good-night {
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+        }
+
+        .good-night:hover {
+            box-shadow: 0 6px 25px rgba(19, 78, 94, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Birthday Button */
+        .birthday {
+            background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
+        }
+
+        .birthday:hover {
+            box-shadow: 0 6px 25px rgba(248, 87, 166, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Control Buttons */
+        #previous-button,
+        #next-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-width: 110px;
+        }
+
+        #previous-button:hover,
+        #next-button:hover {
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        #reset-button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            min-width: 110px;
+        }
+
+        #reset-button:hover {
+            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Scrollbar Styling */
+        #caption-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #caption-box::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        #caption-box::-webkit-scrollbar-thumb {
+            background: rgba(255, 143, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        #caption-box::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 143, 0, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            #caption-box {
+                font-size: 16px;
+                min-height: 150px;
+                padding: 20px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 12px 18px;
+                min-width: 120px;
+            }
+
+            .category-buttons,
+            .control-buttons {
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            button {
+                min-width: 100px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Photo Captions 💥</h1>
+        <textarea id="caption-box" readonly></textarea>
+        
+        <div class="category-buttons">
+            <button id="good-morning-button" class="good-morning">Good Morning 🌻</button>
+            <button id="good-night-button" class="good-night">Good Night 🌛</button>
+            <button id="birthday-button" class="birthday">Birthday 🎁</button>
+        </div>
+        
+        <div class="control-buttons">
+            <button id="previous-button">Previous</button>
+            <button id="next-button">Next</button>
+            <button id="reset-button">Reset</button>
+        </div>
+    </div>
+
+    <audio id="reset-sound" src="reset.mp3"></audio>
+    <audio id="click-sound" src="click.mp3"></audio>
+    <audio id="good-morning-sound" src="notification.mp3"></audio>
+    <audio id="good-night-sound" src="notification.mp3"></audio>
+    <audio id="birthday-sound" src="notification.mp3"></audio>
+
+    <script>
+        let captions = [];
+        let goodMorningCaptions = [];
+        let goodNightCaptions = [];
+        let birthdayCaptions = [];
+        let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
+        let currentCaptionIndex = 0;
+        let captionsArray = [];
+        const captionBox = document.getElementById("caption-box");
+        const resetSound = document.getElementById("reset-sound");
+        const clickSound = document.getElementById("click-sound");
+        const goodMorningSound = document.getElementById("good-morning-sound");
+        const goodNightSound = document.getElementById("good-night-sound");
+        const birthdaySound = document.getElementById("birthday-sound");
+
+        // Function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Load captions from files
+        async function loadCaptions() {
+            try {
+                const response = await fetch('captions.txt');
+                const text = await response.text();
+                captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
+
+                const morningResponse = await fetch('goodmorning.txt');
+                const morningText = await morningResponse.text();
+                goodMorningCaptions = morningText.split('----').map(c => c.trim());
+
+                const nightResponse = await fetch('goodnight.txt');
+                const nightText = await nightResponse.text();
+                goodNightCaptions = nightText.split('----').map(c => c.trim());
+
+                const birthdayResponse = await fetch('birthday.txt');
+                const birthdayText = await birthdayResponse.text();
+                birthdayCaptions = birthdayText.split('----').map(c => c.trim());
+
+                // Shuffle the captions for random order
+                shuffleArray(captions);
+                shuffleArray(goodMorningCaptions);
+                shuffleArray(goodNightCaptions);
+                shuffleArray(birthdayCaptions);
+
+                // Set to default category captions and display the first one
+                captionsArray = captions;
+                currentCaptionIndex = 0;
+                showCaption();
+            } catch (error) {
+                captionBox.value = "Error loading captions!";
+                console.error(error);
+            }
+        }
+
+        // Function to display the current caption in the caption box
+        function showCaption() {
+            if (captionsArray.length > 0) {
+                captionBox.value = captionsArray[currentCaptionIndex];
+            } else {
+                captionBox.value = "No more captions!";
+            }
+        }
+
+        // Button handlers for switching categories
+        document.getElementById("good-morning-button").addEventListener("click", function () {
+            goodMorningSound.play();
+            captionsArray = goodMorningCaptions;
+            currentCaptionIndex = 0; // Start from the first caption of the selected category
+            shuffleArray(captionsArray); // Shuffle for randomness
+            showCaption();
+        });
+
+        document.getElementById("good-night-button").addEventListener("click", function () {
+            goodNightSound.play();
+            captionsArray = goodNightCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray); // Shuffle for randomness
+            showCaption();
+        });
+
+        document.getElementById("birthday-button").addEventListener("click", function () {
+            birthdaySound.play();
+            captionsArray = birthdayCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray); // Shuffle for randomness
+            showCaption();
+        });
+
+        // Function to copy the current caption and move to the next
+        function copyAndNext() {
+            const currentCaption = captionBox.value;
+
+            // Copy the current caption to clipboard
+            navigator.clipboard.writeText(currentCaption)
+                .then(() => {
+                    console.log('Copied to clipboard:', currentCaption);
+                })
+                .catch(err => {
+                    console.error('Could not copy text:', err);
+                });
+
+            // Move to the next caption
+            currentCaptionIndex = (currentCaptionIndex + 1) % captionsArray.length;
+            showCaption();
+        }
+
+        // Button handler for "Next"
+        document.getElementById("next-button").addEventListener("click", function () {
+            clickSound.play();
+            copyAndNext();
+        });
+
+        // Button handler for "Previous"
+        document.getElementById("previous-button").addEventListener("click", function () {
+            clickSound.play();
+            if (captionsArray.length > 0) {
+                currentCaptionIndex = (currentCaptionIndex - 1 + captionsArray.length) % captionsArray.length;
+                showCaption();
+            }
+        });
+
+        // Button handler for "Reset"
+        document.getElementById("reset-button").addEventListener("click", function () {
+            resetSound.play();
+            localStorage.removeItem('usedCaptions');
+            usedCaptions = [];
+            currentCaptionIndex = 0;
+            captionsArray = captions; // Reset to default category
+            shuffleArray(captionsArray); // Shuffle captions
+            showCaption();
+        });
+
+        // Load captions on page load
+        loadCaptions();
+
+    </script>
+
+</body>
+
+</html>
