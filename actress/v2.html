@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Captions ⚡️</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        /* --- RESET & BASICS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505; /* Deepest Black */
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- MAIN CARD --- */
+        .container {
+            background-color: #121212; /* Matte Dark Grey */
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Accent Line */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            text-align: left;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h1 span { font-size: 1.2em; }
+
+        /* --- CAPTION BOX --- */
+        .caption-wrapper { position: relative; margin-bottom: 25px; }
+
+        #caption-box {
+            width: 100%;
+            height: 140px;
+            background-color: #080808;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            padding: 20px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #caption-box:focus {
+            border-color: #666;
+        }
+
+        /* --- BUTTONS GENERAL --- */
+        button {
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            outline: none;
+        }
+
+        button:active { transform: scale(0.96); }
+
+        /* --- CATEGORY BUTTONS (GRID) --- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .cat-btn {
+            padding: 12px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            background-color: #1e1e1e;
+            color: #888;
+            border: 1px solid #2a2a2a;
+        }
+
+        .cat-btn:hover { background-color: #252525; color: #fff; }
+
+        /* Active States for Categories */
+        .cat-btn.active-morning { background-color: #2E291F; color: #FFD166; border-color: #FFD166; }
+        .cat-btn.active-night { background-color: #1A262E; color: #4CC9F0; border-color: #4CC9F0; }
+        .cat-btn.active-bday { background-color: #2E1A1F; color: #EF476F; border-color: #EF476F; }
+
+        /* --- CONTROL BUTTONS --- */
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn-main {
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #previous-button {
+            background-color: #1e1e1e;
+            color: #fff;
+            flex-grow: 0;
+            width: 60px; /* Square-ish for back button */
+            border: 1px solid #333;
+        }
+        #previous-button:hover { background-color: #333; }
+
+        #next-button {
+            background: #ffffff;
+            color: #000000;
+            font-weight: 800;
+        }
+        #next-button:hover { background-color: #e0e0e0; }
+
+        /* --- RESET LINK --- */
+        .footer-actions {
+            margin-top: 25px;
+            text-align: center;
+        }
+        #reset-button {
+            background: none;
+            color: #444;
+            font-size: 12px;
+            text-decoration: underline;
+            padding: 5px;
+        }
+        #reset-button:hover { color: #ff4757; }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #00c853;
+            color: #000;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 480px) {
+            .container { padding: 25px; }
+            h1 { font-size: 20px; }
+            #caption-box { font-size: 16px; height: 120px; }
+            .cat-btn { font-size: 12px; padding: 10px 5px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="copy-toast" class="toast">Copied! ✓</div>
+
+        <h1><span>⚡️</span> Captions</h1>
+        
+        <div class="caption-wrapper">
+            <textarea id="caption-box" readonly></textarea>
+        </div>
+
+        <div class="category-grid">
+            <button id="good-morning-button" class="cat-btn">Morning 🌻</button>
+            <button id="good-night-button" class="cat-btn">Night 🌛</button>
+            <button id="birthday-button" class="cat-btn">Birthday 🎁</button>
+        </div>
+
+        <div class="control-group">
+            <button id="previous-button" title="Previous">←</button>
+            <button id="next-button" class="btn-main">Next & Copy ➝</button>
+        </div>
+
+        <div class="footer-actions">
+            <button id="reset-button">Reset All History</button>
+        </div>
+    </div>
+
+    <audio id="reset-sound" src="reset.mp3"></audio>
+    <audio id="click-sound" src="click.mp3"></audio>
+    <audio id="good-morning-sound" src="notification.mp3"></audio>
+    <audio id="good-night-sound" src="notification.mp3"></audio>
+    <audio id="birthday-sound" src="notification.mp3"></audio>
+
+    <script>
+        let captions = [];
+        let goodMorningCaptions = [];
+        let goodNightCaptions = [];
+        let birthdayCaptions = [];
+        let usedCaptions = JSON.parse(localStorage.getItem('usedCaptions')) || [];
+        let currentCaptionIndex = 0;
+        let captionsArray = [];
+        const captionBox = document.getElementById("caption-box");
+        const resetSound = document.getElementById("reset-sound");
+        const clickSound = document.getElementById("click-sound");
+        const goodMorningSound = document.getElementById("good-morning-sound");
+        const goodNightSound = document.getElementById("good-night-sound");
+        const birthdaySound = document.getElementById("birthday-sound");
+        
+        // UI Reference
+        const toast = document.getElementById("copy-toast");
+        const catBtns = document.querySelectorAll('.cat-btn');
+
+        // Helper to visually select category
+        function setActiveCategory(btnId, className) {
+            catBtns.forEach(btn => {
+                btn.classList.remove('active-morning', 'active-night', 'active-bday');
+            });
+            const activeBtn = document.getElementById(btnId);
+            activeBtn.classList.add(className);
+        }
+
+        // Show "Copied" Toast
+        function showToast() {
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 1500);
+        }
+
+        // Shuffle Logic
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Load Data
+        async function loadCaptions() {
+            try {
+                const response = await fetch('captions.txt');
+                const text = await response.text();
+                captions = text.split('----').map(c => c.trim()).filter(c => c && !usedCaptions.includes(c));
+
+                const morningResponse = await fetch('goodmorning.txt');
+                const morningText = await morningResponse.text();
+                goodMorningCaptions = morningText.split('----').map(c => c.trim());
+
+                const nightResponse = await fetch('goodnight.txt');
+                const nightText = await nightResponse.text();
+                goodNightCaptions = nightText.split('----').map(c => c.trim());
+
+                const birthdayResponse = await fetch('birthday.txt');
+                const birthdayText = await birthdayResponse.text();
+                birthdayCaptions = birthdayText.split('----').map(c => c.trim());
+
+                // Shuffle
+                shuffleArray(captions);
+                shuffleArray(goodMorningCaptions);
+                shuffleArray(goodNightCaptions);
+                shuffleArray(birthdayCaptions);
+
+                // Init
+                captionsArray = captions;
+                currentCaptionIndex = 0;
+                showCaption();
+            } catch (error) {
+                captionBox.value = "Error loading captions!";
+                console.error(error);
+            }
+        }
+
+        function showCaption() {
+            if (captionsArray.length > 0) {
+                captionBox.value = captionsArray[currentCaptionIndex];
+            } else {
+                captionBox.value = "No more captions!";
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+
+        document.getElementById("good-morning-button").addEventListener("click", function () {
+            goodMorningSound.play();
+            captionsArray = goodMorningCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray);
+            showCaption();
+            setActiveCategory('good-morning-button', 'active-morning');
+        });
+
+        document.getElementById("good-night-button").addEventListener("click", function () {
+            goodNightSound.play();
+            captionsArray = goodNightCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray);
+            showCaption();
+            setActiveCategory('good-night-button', 'active-night');
+        });
+
+        document.getElementById("birthday-button").addEventListener("click", function () {
+            birthdaySound.play();
+            captionsArray = birthdayCaptions;
+            currentCaptionIndex = 0;
+            shuffleArray(captionsArray);
+            showCaption();
+            setActiveCategory('birthday-button', 'active-bday');
+        });
+
+        function copyAndNext() {
+            const currentCaption = captionBox.value;
+
+            // Copy
+            navigator.clipboard.writeText(currentCaption)
+                .then(() => {
+                    showToast();
+                })
+                .catch(err => console.error('Copy failed:', err));
+
+            // Next
+            currentCaptionIndex = (currentCaptionIndex + 1) % captionsArray.length;
+            showCaption();
+        }
+
+        document.getElementById("next-button").addEventListener("click", function () {
+            clickSound.play();
+            copyAndNext();
+        });
+
+        document.getElementById("previous-button").addEventListener("click", function () {
+            clickSound.play();
+            if (captionsArray.length > 0) {
+                currentCaptionIndex = (currentCaptionIndex - 1 + captionsArray.length) % captionsArray.length;
+                showCaption();
+            }
+        });
+
+        document.getElementById("reset-button").addEventListener("click", function () {
+            resetSound.play();
+            localStorage.removeItem('usedCaptions');
+            usedCaptions = [];
+            currentCaptionIndex = 0;
+            captionsArray = captions;
+            shuffleArray(captionsArray);
+            showCaption();
+            
+            // Reset UI selection
+            catBtns.forEach(btn => btn.classList.remove('active-morning', 'active-night', 'active-bday'));
+        });
+
+        // Initialize
+        loadCaptions();
+
+    </script>
+</body>
+</html>
